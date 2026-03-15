@@ -13,7 +13,7 @@ export default async function addReview(req, res) {
     if (!listing) {
       return res.status(404).json({ message: "Listing not found" });
     }
-
+    
     // Create and save the new review document
     const newReview = new Review({ content, rating });
     await newReview.save();

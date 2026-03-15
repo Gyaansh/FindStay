@@ -1,5 +1,5 @@
 import joi from "joi";
-import ExpressError from "../Utils/expressError.js";
+import ExpressError from "../Utils/ExpressError.js";
 const validSchema = joi.object({
     title: joi.string().required(),
     description :  joi.string().required(),

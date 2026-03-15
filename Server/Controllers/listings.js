@@ -12,5 +12,6 @@ async function listings(req,res){
         console.log(err);
         
     }
+    
 }
 export default listings;
