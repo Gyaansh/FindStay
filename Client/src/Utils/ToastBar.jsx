@@ -6,11 +6,17 @@ export const showSuccess = (message)=>{
 export const showError = (message)=>{
     toast.error(message);
 }
-export const showPromise = (promise,message)=>{
-    toast.promise(promise, {
-    loading: message.loading,
-    success: message.success,
-    error: message.error,
+export const showPromise = (promise,waiting, messageResolve, messageReject)=>{
+    const delay = (ms) => new Promise(res => setTimeout(res, ms));
+    const wrappedPromise = Promise.all([
+        promise,
+        delay(2000) // ensures at least 2 sec loading
+    ]);
+
+    toast.promise(wrappedPromise, {
+    loading: waiting,
+    success: messageResolve,
+    error: messageReject,
   });
 
 }

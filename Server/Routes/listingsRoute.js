@@ -4,7 +4,8 @@ import newListing from '../Controllers/newListing.js'
 import getListingByid from '../Controllers/getListingById.js';
 import addReview from '../Controllers/addReview.js';
 import wrapAsync from '../Utils/wrapAsync.js';
-import {schemaValidator,reviewValidator} from '../Models/Validator.js';
+import {schemaValidator,reviewValidator,} from '../Models/Validator.js';
+
 const Router = express.Router();
 
 Router.get('/',wrapAsync(listings));

@@ -20,60 +20,13 @@ const Signup = () => {
   });
   const [isSubmiting, setIsSubmiting] = useState(false);
 
-  const fetchApi = async () => {
-    try {
-      const result = await fetch("/api/user/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: user.username,
-          email: user.email,
-          password: user.password,
-        }),
-      });
-      const data = await result.json();
-      if (!result.ok) {
-        throw new Error(data.message || data.error || "Signup failed");
-      }
-      setIsSubmiting(false);
-      return data;
-    } catch (err) {
-      console.log(err.message);
-
-      showError(err.message);
-      if (err.message.includes("already registered")) {
-        setWarnings((prev) => ({
-          ...prev,
-          username: [err.message],
-        }));
-      }
-      throw err;
-    }
-  };
-
   function SubmitHandeler(e) {
     e.preventDefault();
     setWarnings({
     username: [],
     password: [],
   });
-    if (!(user.password === user.password2)) {
-      setWarnings((prev) => ({
-        ...prev,
-        password: ["Passwords do not match"],
-      }));
-      return;
-    }
-    let isPasswordValid = validatePassword(user.password).errors;
-    if (isPasswordValid.length) {
-      setWarnings((prev) => ({
-        ...prev,
-        password: isPasswordValid,
-      }));
-      return;
-    }
+   
     if (isSubmiting) return;
     setIsSubmiting(true);
     showPromise(
@@ -98,7 +51,7 @@ const Signup = () => {
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8 border border-gray-200">
         {/* Heading */}
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
-          Create your account
+          Login Your Account
         </h2>
 
         {/* Form */}
@@ -167,21 +120,7 @@ const Signup = () => {
               )}
             </span>
           </div>
-
-          {/* Confirm Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Confirm Password
-            </label>
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password2"
-              placeholder="Confirm password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              onChange={handleChange}
-              value={user.password2}
-            />
-          </div>
+          
           {warnings.password.length > 0 && (
             <div className="mt-2 bg-red-50 border border-red-200 rounded-md p-3">
               <ul className="text-sm text-red-600 space-y-1">

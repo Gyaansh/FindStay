@@ -6,11 +6,12 @@ import CardList from "./CardList";
 import ListingForm from "./ListingForm";
 import Signup from "./Pages/Signup";
 import { Toaster } from "react-hot-toast";
+import Login from "./Pages/Login";
 function App() {
   return (
     <>
       <Toaster
-        position="top-right"
+        position="top-center"
         toastOptions={{
           duration: 3000,
         }}
@@ -21,6 +22,7 @@ function App() {
         <Route path="/listing/:id" element={<SingleListing />} />
         <Route path="/new" element={<ListingForm />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login/>} />
       </Routes>
     </>
   );

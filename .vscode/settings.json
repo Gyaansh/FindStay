@@ -19,11 +19,15 @@
         
       ]
     },
+    {
+      "splitTerminals": [
+       {
+          "name": "Git",
+          "commands": ["git status"]
+        }
+        
+      ]
+    },
   ],
-  "cSpell.words": [
-    "atleast",
-    "Bandra",
-    "imgur",
-    "newlisting"
-  ],
+  
 }

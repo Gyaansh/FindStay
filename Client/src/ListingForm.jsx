@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { use, useState } from "react";
+import { showError, showPromise } from "./Utils/ToastBar";
 const ListingForm = () => {
   const [formData, setFormData] = useState({
     title: "",
@@ -9,6 +9,7 @@ const ListingForm = () => {
     location: "",
     country: "India"
   });
+  const [isSubmiting, setIsSubmiting] = useState(false);  
 
   const [errors, setErrors] = useState({});
 
@@ -25,14 +26,14 @@ const ListingForm = () => {
     let imageUrl = urlInput.value.trim();
     
     if (!imageUrl) {
-      alert("Please enter an image URL");
+      showError("Please enter an image URL");
       return;
     }
     
     imageUrl = autoResizeImage(imageUrl);
     
     if (formData.URL.length >= 15) {
-      alert("Too many photos! Max 15 images.");
+      showError("Too many photos! Max 15 images.");
       return;
     }
     
@@ -73,13 +74,8 @@ const ListingForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    if (!isFormValid()) {
-      alert("Please fix errors!");
-      return;
-    }
-    try {
+const fetchApi = async()=>{
+   try {
     const res = await fetch("/api/listing/newlisting", {
       method: "POST",
       headers: {
@@ -90,17 +86,30 @@ const ListingForm = () => {
 
     const result = await res.json();
     console.log("Server Response:", result);
+    setTimeout(() => {
+      setIsSubmiting(false);
+    }, 3000);
 
   } catch (err) {
     console.error("Request failed:", err);
   }
+}
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    if (!isFormValid()) {
+      showError("Please fix errors!");
+      return;
+    }
+    setIsSubmiting(()=>(!isSubmiting));
+    showPromise(fetchApi(), "Creating A New Listing...", "New Listing Created", "Some Error occured");
 };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto w-full p-3">
         <div className={theme.card + " rounded-3xl p-6 lg:p-8 space-y-6"}>
-          <form method="post">
+          <form method="post" onSubmit={handleSubmit}>
              <div>
             <label className="block text-lg font-bold text-gray-800 mb-4">Property Title *</label>
             <input
@@ -243,8 +252,8 @@ const ListingForm = () => {
           </div>
 
           <button
+            disabled={isSubmiting}
             type="submit"
-            onClick={handleSubmit}
             className="w-full bg-[#ea580c] text-white py-6 px-8 rounded-3xl font-black text-xl shadow-2xl hover:shadow-3xl hover:scale-[1.02] focus:ring-4 focus:ring-amber-400 transform transition-all duration-300"
           >
             Publish Listing!
