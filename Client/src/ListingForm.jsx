@@ -85,7 +85,6 @@ const fetchApi = async()=>{
     });
 
     const result = await res.json();
-    console.log("Server Response:", result);
     setTimeout(() => {
       setIsSubmiting(false);
     }, 3000);

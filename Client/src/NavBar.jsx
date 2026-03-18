@@ -4,7 +4,7 @@ import NativeSelect from "@mui/material/NativeSelect";
 
 export default function NavBar() {
   return (
-    <div className="mt-6 w-full px-4 flex justify-center">
+    <div className="my-1 w-full px-4 flex justify-center">
       <div
         className="
           w-full max-w-[500px]

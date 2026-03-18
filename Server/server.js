@@ -4,6 +4,7 @@ import express from "express";
 import jwt from 'jsonwebtoken';
 import passport from "passport";
 import  LocalStrategy from 'passport-local';
+import cookieParser from "cookie-parser";
 
 import listingsRoute from "./Routes/listingsRoute.js"
 import userRoute from "./Routes/userRoute.js";
@@ -14,19 +15,21 @@ const app = express();
 const port = 8080;
 
 DbConnect();
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 
-jwt.sign({
-  exp: Math.floor(Date.now() / 1000) + (60 * 60),
-  data: 'foobar'
-}, 'secret');
-
+// jwt.sign({
+    //   exp: Math.floor(Date.now() / 1000) + (60 * 60),
+    //   data: 'foobar'
+    // }, 'secret');
+    
+app.use(cookieParser());
 app.use(passport.initialize());
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 
 app.use("/api/listing",listingsRoute);

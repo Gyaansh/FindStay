@@ -5,6 +5,11 @@ import visibilityOff from "../assets/VisibilityOff.svg";
 import visibilityOn from "../assets/VisibilityOn.svg";
 import validatePassword from "../Utils/passwordValidator";
 import { showError, showPromise } from "../Utils/ToastBar";
+import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import loginUser from "../Utils/loginUser";
+import Footer from "../Footer";
+
 
 const Signup = () => {
   const [user, setUser] = useState({
@@ -33,11 +38,14 @@ const Signup = () => {
           password: user.password,
         }),
       });
+      setTimeout(() => {
+        setIsSubmiting(false);
+      }, 2000);
       const data = await result.json();
       if (!result.ok) {
         throw new Error(data.message || data.error || "Signup failed");
       }
-      setIsSubmiting(false);
+      loginUser(user);
       return data;
     } catch (err) {
       console.log(err.message);
@@ -77,11 +85,14 @@ const Signup = () => {
     if (isSubmiting) return;
     setIsSubmiting(true);
     showPromise(
-      fetchApi(),
+      fetchApi(user),
       "Creating User...",
       "User Registered Successfully",
       "Some Error Occured",
     );
+
+
+
   }
 
   const handleChange = (e) => {
@@ -94,8 +105,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F3EE] flex items-center justify-center px-4 p-12">
-      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8 border border-gray-200">
+   <div className="min-h-screen flex flex-col bg-[#F6F3EE]">
+    <div className="bg-[#F6F3EE] flex items-center justify-center px-4 p-12 flex-grow">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8 border border-gray-200 flex-grow">
         {/* Heading */}
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
           Create your account
@@ -243,12 +255,13 @@ const Signup = () => {
         <p className="text-sm text-center text-gray-600 mt-6">
           Already have an account?{" "}
           <span className="text-indigo-600 cursor-pointer hover:underline">
-            Sign in
+            <Link to="/login" >Log in</Link>
           </span>
         </p>
       </div>
     </div>
-  );
+      <Footer/>
+  </div>);
 };
 
 export default Signup;

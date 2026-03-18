@@ -1,12 +1,11 @@
 import SingleListing from "./Pages/SingleListing";
-import NavBar from "./NavBar";
 import { Routes, Route } from "react-router-dom";
 import "./tailwind.css";
-import CardList from "./CardList";
-import ListingForm from "./ListingForm";
 import Signup from "./Pages/Signup";
 import { Toaster } from "react-hot-toast";
 import Login from "./Pages/Login";
+import HomePage from "./Pages/HomePage";
+import Newlisting from "./Pages/NewListing";
 function App() {
   return (
     <>
@@ -17,12 +16,12 @@ function App() {
         }}
       />
       <Routes>
-        <Route path="/Nav" element={<NavBar />} />
-        <Route path="/listing" element={<CardList />} />
         <Route path="/listing/:id" element={<SingleListing />} />
-        <Route path="/new" element={<ListingForm />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<HomePage/>} />
+        <Route path="/listing/new" element={<Newlisting/>} />
+        <Route path="/signup" element={<Signup/>} />
         <Route path="/login" element={<Login/>} />
+
       </Routes>
     </>
   );

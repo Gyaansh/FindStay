@@ -3,38 +3,36 @@ import gitLogo from "../assets/git.png";
 import googleLogo from "../assets/google.webp";
 import visibilityOff from "../assets/VisibilityOff.svg";
 import visibilityOn from "../assets/VisibilityOn.svg";
-import validatePassword from "../Utils/passwordValidator";
 import { showError, showPromise } from "../Utils/ToastBar";
+import { Link } from "react-router-dom";
+import loginUser from "../Utils/loginUser";
+import Footer from "../Footer";
 
 const Signup = () => {
   const [user, setUser] = useState({
     username: "",
     password: "",
     email: "",
-    password2: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [warnings, setWarnings] = useState({
-    username: [],
-    password: [],
-  });
   const [isSubmiting, setIsSubmiting] = useState(false);
+
 
   function SubmitHandeler(e) {
     e.preventDefault();
-    setWarnings({
-    username: [],
-    password: [],
-  });
-   
+
     if (isSubmiting) return;
     setIsSubmiting(true);
+    loginUser(user);
     showPromise(
-      fetchApi(),
-      "Creating User...",
-      "User Registered Successfully",
+      loginUser(user),
+      "Logging In",
+      "Login Successfull",
       "Some Error Occured",
     );
+    setTimeout(() => {
+        setIsSubmiting(false);
+      }, 3000);
   }
 
   const handleChange = (e) => {
@@ -46,9 +44,10 @@ const Signup = () => {
     });
   };
 
-  return (
-    <div className="min-h-screen bg-[#F6F3EE] flex items-center justify-center px-4 p-12">
-      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8 border border-gray-200">
+  return(
+    <div className="min-h-screen flex flex-col bg-[#F6F3EE]">
+    <div className=" bg-[#F6F3EE] flex items-center justify-center px-4 p-12 flex-grow">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8 border border-gray-200 flex-grow">
         {/* Heading */}
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
           Login Your Account
@@ -69,15 +68,6 @@ const Signup = () => {
               value={user.username}
               onChange={handleChange}
             />
-            {warnings.username.length > 0 && (
-              <div className="mt-2 bg-red-50 border border-red-200 rounded-md p-3">
-                <ul className="text-sm text-red-600 space-y-1">
-                  {warnings.username.map((err, index) => (
-                    <li key={index}>• {err}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
 
           {/* Email */}
@@ -93,7 +83,6 @@ const Signup = () => {
               onChange={handleChange}
               value={user.email}
             />
-            
           </div>
 
           {/* Password */}
@@ -120,16 +109,6 @@ const Signup = () => {
               )}
             </span>
           </div>
-          
-          {warnings.password.length > 0 && (
-            <div className="mt-2 bg-red-50 border border-red-200 rounded-md p-3">
-              <ul className="text-sm text-red-600 space-y-1">
-                {warnings.password.map((err, index) => (
-                  <li key={index}>• {err}</li>
-                ))}
-              </ul>
-            </div>
-          )}
 
           {/* Terms */}
           <div className="flex items-center text-sm">
@@ -180,13 +159,17 @@ const Signup = () => {
 
         {/* Login link */}
         <p className="text-sm text-center text-gray-600 mt-6">
-          Already have an account?{" "}
+          Do not have an account?{" "}
           <span className="text-indigo-600 cursor-pointer hover:underline">
-            Sign in
+           {/* <a href="/signup">Sign Up</a> */}
+           <Link to="/signup" >Sign Up</Link>
           </span>
         </p>
       </div>
     </div>
+      <Footer/>
+    </div>
+
   );
 };
 

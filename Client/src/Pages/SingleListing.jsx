@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useEffect, useState, useCallback } from "react";
 import Reviews from "../reviews";
+import Footer from "../Footer";
+import Header from "../header";
 
 const SingleListing = () => {
   const { id } = useParams();
@@ -27,7 +29,6 @@ const SingleListing = () => {
   useEffect(() => {
     fetchListing();
   }, [fetchListing]);
-  console.log(listing);
   
   if (loading) {
     return (
@@ -48,7 +49,10 @@ const SingleListing = () => {
   
 
   return (
-    <div className="min-h-screen bg-orange-50 px-6 py-10">
+    <>
+      <Header/>
+      <div className="min-h-screen bg-orange-50 pt-10">
+      
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
         {/* IMAGE GALLERY */}
         <div>
@@ -127,8 +131,9 @@ const SingleListing = () => {
           onReviewAdded={fetchListing} 
         />
       </div>
-      
+      <Footer/>
     </div>
+    </>
   );
 };
 
