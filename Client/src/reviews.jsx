@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Rating, TextField } from "@mui/material";
+import {showError} from "./Utils/ToastBar";
 
 export default function Reviews({ listingId, reviews = [], onReviewAdded }) {
   const [rating, setRating] = useState(0);
@@ -16,7 +17,6 @@ export default function Reviews({ listingId, reviews = [], onReviewAdded }) {
     if(content.length<10) newErrors.content = "Comment must be at least 10 characters long";
     if(content.length>500) newErrors.content = "Comment must be at most 500 characters long";
     setError(newErrors);
-    console.log(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -33,10 +33,13 @@ export default function Reviews({ listingId, reviews = [], onReviewAdded }) {
     try {
       const res = await fetch(`/api/listing/${listingId}/reviews`, {
         method: "POST",
+        credentials:"include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ rating, content }),
       });
+      const data = await res.json();
       if (!res.ok) {
+        showError(data.message);
         throw new Error("Failed to submit review");
       }
       setContent("");

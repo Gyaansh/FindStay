@@ -7,8 +7,15 @@ import { showError, showPromise } from "../Utils/ToastBar";
 import { Link } from "react-router-dom";
 import loginUser from "../Utils/loginUser";
 import Footer from "../Footer";
+import { useNavigate, useLocation } from "react-router-dom";
+
 
 const Signup = () => {
+ const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
+
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -18,20 +25,21 @@ const Signup = () => {
   const [isSubmiting, setIsSubmiting] = useState(false);
 
 
-  function SubmitHandeler(e) {
+  async function SubmitHandeler(e) {
     e.preventDefault();
 
     if (isSubmiting) return;
     setIsSubmiting(true);
-    loginUser(user);
+    const res = await loginUser(user);
     showPromise(
-      loginUser(user),
+      res,
       "Logging In",
       "Login Successfull",
       "Some Error Occured",
     );
     setTimeout(() => {
-        setIsSubmiting(false);
+      setIsSubmiting(false);
+      navigate("/");
       }, 3000);
   }
 

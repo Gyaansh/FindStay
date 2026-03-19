@@ -7,7 +7,7 @@ const isAlreadyLoggedIn = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, "secretkey");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // user already has valid token
     return res.status(400).json({

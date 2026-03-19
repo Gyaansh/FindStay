@@ -1,43 +1,78 @@
-import { useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
 function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="relative flex items-center justify-between px-6 py-3 bg-white shadow-md py-6">
+    <header className="flex flex-col md:flex-row md:items-center md:justify-between px-6 py-4 bg-white shadow-md gap-4 relative">
+      {/* Left */}
+      <button
+        onClick={() => navigate("/")}
+        className="text-xl font-semibold cursor-pointer"
+      >
+        Home
+      </button>
 
-  {/* Left */}
-  <div
-    onClick={() => navigate("/")}
-    className="text-xl font-semibold cursor-pointer"
-  >
-    Home
-  </div>
+      {/* Center */}
+      <div className="flex justify-center md:flex-1">
+        <NavBar />
+      </div>
 
-  {/* Center (absolute true center) */}
-  <div className="absolute left-1/2 transform -translate-x-1/2">
-    <NavBar />
-  </div>
+      {/* Desktop Buttons */}
+      <div className="hidden md:flex items-center gap-4">
+        <button
+          onClick={() =>
+            navigate("/login", {
+              state: { from: location },
+            })
+          }
+          className="px-4 py-2 rounded-lg hover:bg-gray-100 transition"
+        >
+          Login
+        </button>
 
-  {/* Right */}
-  <div className="flex items-center gap-4">
-    <button
-      onClick={() => navigate("/")}
-      className="px-4 py-2 rounded-lg hover:bg-gray-100 transition"
-    >
-        All Listings
-    </button>
+        <button
+          onClick={() => navigate("/listing/new")}
+          className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition"
+        >
+          Add New Listing
+        </button>
+      </div>
 
-    <button
-      onClick={() => navigate("/listing/new")}
-      className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition"
-    >
-        Add New Listing
-    </button>
-  </div>
+      {/* Hamburger Icon (Mobile only) */}
+      <div className="md:hidden absolute right-6 top-4">
+        <button onClick={() => setMenuOpen(!menuOpen)}>☰</button>
+      </div>
 
-</header>
+      {/* Mobile Dropdown Menu */}
+      {menuOpen && (
+        <div className="md:hidden flex flex-col gap-3 mt-2 bg-white shadow-lg rounded-lg p-4">
+          <button
+            onClick={() => {
+              navigate("/");
+              setMenuOpen(false);
+            }}
+            className="px-4 py-2 rounded-lg hover:bg-gray-100 text-left"
+          >
+            All Listings
+          </button>
+
+          <button
+            onClick={() => {
+              navigate("/listing/new");
+              setMenuOpen(false);
+            }}
+            className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 text-left"
+          >
+            Add New Listing
+          </button>
+        </div>
+      )}
+    </header>
   );
 }
 

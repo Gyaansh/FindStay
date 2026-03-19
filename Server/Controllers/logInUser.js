@@ -17,7 +17,7 @@ const logInUser = async (req, res) => {
         id: user._id,
         username: user.username,
       },
-      "secretkey",
+      process.env.JWT_SECRET,
       { expiresIn: "60d" }
     );
 

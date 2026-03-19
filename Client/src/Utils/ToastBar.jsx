@@ -12,12 +12,14 @@ export const showPromise = (promise,waiting, messageResolve, messageReject)=>{
         promise,
         delay(2000) // ensures at least 2 sec loading
     ]);
-
     toast.promise(wrappedPromise, {
-    loading: waiting,
-    success: messageResolve,
-    error: messageReject,
-  });
-
+        loading: waiting,
+        success: messageResolve,
+        error: messageReject,
+    });
+    
+}
+export const showLoading = (message)=>{
+    toast.loading(message);
 }
 export default "Toast";

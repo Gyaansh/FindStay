@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import gitLogo from "../assets/git.png";
 import googleLogo from "../assets/google.webp";
 import visibilityOff from "../assets/VisibilityOff.svg";
@@ -12,6 +14,11 @@ import Footer from "../Footer";
 
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
+
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -45,7 +52,9 @@ const Signup = () => {
       if (!result.ok) {
         throw new Error(data.message || data.error || "Signup failed");
       }
+      
       loginUser(user);
+      navigate(from, { replace: true });
       return data;
     } catch (err) {
       console.log(err.message);

@@ -5,9 +5,14 @@ import { userValidator } from "../Models/Validator.js";
 import logInUser from "../Controllers/logInUser.js";
 import passport from "passport";
 import isAlreadyLoggedIn from "../Utils/iaAlreadyLoggedIn.js";
+import isLoggedIn from "../Utils/isLoggedIn.js";
+import checkAuth from "../Controllers/checkAuth.js";
+
+
 const Router = express.Router();
 
-Router.post("/signup", userValidator, wrapAsync(userSignUp));
+Router.post("/signup", userValidator, wrapAsync(userSignUp),logInUser);
+
 Router.post(
   "/login",
   isAlreadyLoggedIn,
@@ -29,4 +34,7 @@ Router.post(
   },
   logInUser,
 );
+
+Router.get("/checkauth",isLoggedIn,checkAuth);
+
 export default Router;

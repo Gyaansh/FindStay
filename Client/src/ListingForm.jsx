@@ -1,6 +1,8 @@
 import { use, useState } from "react";
 import { showError, showPromise } from "./Utils/ToastBar";
-const ListingForm = () => {
+import { useNavigate } from "react-router-dom";
+const ListingForm = () => { 
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -78,6 +80,7 @@ const fetchApi = async()=>{
    try {
     const res = await fetch("/api/listing/newlisting", {
       method: "POST",
+      credentials : "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -85,6 +88,11 @@ const fetchApi = async()=>{
     });
 
     const result = await res.json();
+    if(res.ok){
+      setTimeout(() => {
+        navigate('/');
+      }, 3000);
+    }
     setTimeout(() => {
       setIsSubmiting(false);
     }, 3000);

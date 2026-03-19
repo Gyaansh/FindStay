@@ -5,12 +5,13 @@ import jwt from 'jsonwebtoken';
 import passport from "passport";
 import  LocalStrategy from 'passport-local';
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
 import listingsRoute from "./Routes/listingsRoute.js"
 import userRoute from "./Routes/userRoute.js";
 import ExpressError from "./Utils/ExpressError.js";
 import User from "./Models/userSchema.js";
-
+dotenv.config();
 const app = express();
 const port = 8080;
 
@@ -21,11 +22,6 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-
-// jwt.sign({
-    //   exp: Math.floor(Date.now() / 1000) + (60 * 60),
-    //   data: 'foobar'
-    // }, 'secret');
     
 app.use(cookieParser());
 app.use(passport.initialize());
