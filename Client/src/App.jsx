@@ -7,6 +7,7 @@ import Login from "./Pages/Login";
 import HomePage from "./Pages/HomePage";
 import Newlisting from "./Pages/NewListing";
 import ProtectedRoute from "./Utils/ProtectedRoute";
+import EditListing from "./EditListing";
 function App() {
   return (
     <>
@@ -26,9 +27,19 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/listing/edit"
+          element={
+            <ProtectedRoute>
+              <EditListing/>
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
           <Route path="/listing/:id" element={<SingleListing />} />
+
       </Routes>
     </>
   );
