@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import getListingById from "./Utils/getListingById";
 import {
   MapPin,
   IndianRupee,
@@ -16,33 +18,45 @@ const defaultFormData = {
   location: "",
   country: "India",
   price: "",
-  images: [""],
+  URL: [""],
   description: "",
 };
 
-export default function EditListing({ mode, initialData = null }) {
+export default function EditListing({ mode = "edit" }) {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(defaultFormData);
   const [isSubmiting, setIsSubmiting] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+
   let loadingText = mode === "edit" ? "Making Changes" : "Adding New Listing";
-  let successText = mode === "edit" ? "Changes Made Successfully" : "Added New Listing Successfully";
+  let successText =
+    mode === "edit"
+      ? "Changes Made Successfully"
+      : "Added New Listing Successfully";
+
+  let submitButtonText = mode === "edit" ? "Save Changes" : "Added New Listing";
+
+  let redirect = mode === "edit" ? `/listing/${id}` : "/";
+  let heading = mode === "edit" ? "Edit Listing" : "Add Listing";
   useEffect(() => {
-    if (mode === "edit" && initialData) {
-      setFormData({
-        title: initialData.title || "",
-        location: initialData.location || "",
-        country: initialData.country || "India",
-        price: initialData.price || "",
-        images:
-          initialData.images && initialData.images.length > 0
-            ? initialData.images
-            : [""],
-        description: initialData.description || "",
-      });
-    } else {
-      setFormData(defaultFormData);
-    }
-  }, [mode, initialData]);
+    const fetchData = async () => {
+      if (mode === "edit") {
+        let initialData = await getListingById(id);
+        setFormData({
+          title: initialData.title || "",
+          location: initialData.location || "",
+          country: initialData.country || "India",
+          price: initialData.price || "",
+          URL: initialData.URL,
+          description: initialData.description || "",
+        });
+      } else {
+        setFormData(defaultFormData);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   const fetchApi = async () => {
     try {
@@ -58,12 +72,12 @@ export default function EditListing({ mode, initialData = null }) {
       const result = await res.json();
       if (res.ok) {
         setTimeout(() => {
-            showSuccess()
+          showSuccess(successText);
+          navigate(redirect);
         }, 3000);
       }
 
       setTimeout(() => {
-        navigate(`/listing/${id}`);
         setIsSubmiting(false);
       }, 3000);
     } catch (err) {
@@ -80,28 +94,28 @@ export default function EditListing({ mode, initialData = null }) {
   };
 
   const handleImageChange = (index, value) => {
-    const updatedImages = [...formData.images];
-    updatedImages[index] = value;
+    const updatedURL = [...formData.URL];
+    updatedURL[index] = value;
 
     setFormData((prev) => ({
       ...prev,
-      images: updatedImages,
+      URL: updatedURL,
     }));
   };
 
   const addImageField = () => {
     setFormData((prev) => ({
       ...prev,
-      images: [...prev.images, ""],
+      URL: [...prev.URL, ""],
     }));
   };
 
   const removeImageField = (index) => {
-    const updatedImages = formData.images.filter((_, i) => i !== index);
+    const updatedURL = formData.URL.filter((_, i) => i !== index);
 
     setFormData((prev) => ({
       ...prev,
-      images: updatedImages,
+      URL: updatedURL,
     }));
   };
 
@@ -110,19 +124,19 @@ export default function EditListing({ mode, initialData = null }) {
 
     const cleanedData = {
       ...formData,
-      images: formData.images.filter((url) => url.trim() !== ""),
+      URL: formData.URL.filter((url) => url.trim() !== ""),
     };
-    
+
     showLoading(loadingText);
     fetchApi();
   };
 
   return (
     <div className="min-h-screen bg-[#f8f4ee] px-4 py-8 md:px-10">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-6xl"> 
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#222222] md:text-4xl">
-            Edit Listing
+            {heading}
           </h1>
           <p className="mt-2 text-sm text-gray-500">
             Update your property details and keep your listing fresh.
@@ -133,8 +147,8 @@ export default function EditListing({ mode, initialData = null }) {
           {/* Left Side Preview */}
           <div className="rounded-3xl bg-white p-4 shadow-md">
             <div className="grid gap-4 sm:grid-cols-2">
-              {formData.images?.length > 0 ? (
-                formData.images.map((img, index) => (
+              {formData.URL?.length > 0 ? (
+                formData.URL.map((img, index) => (
                   <div key={index} className="overflow-hidden rounded-2xl">
                     <img
                       src={img}
@@ -175,9 +189,44 @@ export default function EditListing({ mode, initialData = null }) {
               <p className="mt-5 text-base leading-7 text-gray-700">
                 {formData.description || "Description will appear here..."}
               </p>
+              <button
+              hidden={mode !== "edit"}
+                type="button"
+                onClick={() => 
+                  setShowDelete(true)
+                }
+                className="cursor-pointer mt-4 w-full rounded-2xl border border-red-200 bg-red-50 px-6 py-3 text-sm font-semibold text-red-600 hover:bg-red-100 transition"
+              >
+                Delete Listing
+              </button>
             </div>
           </div>
+          {showDelete && (
+            <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+              <div className="bg-white rounded-2xl p-6 w-[350px]">
+                <h2 className="text-lg font-semibold">Delete Listing?</h2>
+                <p className="text-sm text-gray-500 mt-2">
+                  This action cannot be undone.
+                </p>
 
+                <div className="mt-4 flex gap-3">
+                  <button
+                    // onClick={handleDelete}
+                    className="flex-1 bg-red-500 text-white py-2 rounded-xl cursor-pointer"
+                  >
+                    Delete
+                  </button>
+
+                  <button
+                    onClick={() => setShowDelete(false)}
+                    className="flex-1 border py-2 rounded-xl cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           {/* Right Side Form */}
           <form
             onSubmit={handleSubmit}
@@ -252,7 +301,7 @@ export default function EditListing({ mode, initialData = null }) {
                 </label>
 
                 <div className="space-y-3">
-                  {formData.images.map((url, index) => (
+                  {formData.URL.map((url, index) => (
                     <div key={index} className="flex items-center gap-3">
                       <input
                         type="text"
@@ -267,7 +316,7 @@ export default function EditListing({ mode, initialData = null }) {
                       <button
                         type="button"
                         onClick={() => removeImageField(index)}
-                        className="rounded-2xl border border-red-200 bg-red-50 p-3 text-red-500 transition hover:bg-red-100"
+                        className="rounded-2xl border border-red-200 bg-red-50 p-3 text-red-500 transition hover:bg-red-100 cursor-pointer"
                       >
                         <Trash2 size={18} />
                       </button>
@@ -277,7 +326,7 @@ export default function EditListing({ mode, initialData = null }) {
                   <button
                     type="button"
                     onClick={addImageField}
-                    className="flex items-center gap-2 rounded-2xl border border-dashed border-orange-300 bg-orange-50 px-4 py-3 text-sm font-medium text-orange-600 transition hover:bg-orange-100"
+                    className="cursor-pointer flex items-center gap-2 rounded-2xl border border-dashed border-orange-300 bg-orange-50 px-4 py-3 text-sm font-medium text-orange-600 transition hover:bg-orange-100"
                   >
                     <Plus size={16} />
                     Add another image URL
@@ -305,14 +354,17 @@ export default function EditListing({ mode, initialData = null }) {
               <button
                 disabled={isSubmiting}
                 type="submit"
-                className="flex-1 rounded-2xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
+                className="flex-1 rounded-2xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 cursor-pointer"
               >
-                Save Changes
+                {submitButtonText}
               </button>
 
               <button
+                onClick={() => {
+                  navigate(redirect);
+                }}
                 type="button"
-                className="flex-1 rounded-2xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                className="cursor-pointer flex-1 rounded-2xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
               >
                 Cancel
               </button>

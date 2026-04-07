@@ -28,7 +28,7 @@ function App() {
           }
         />
         <Route
-          path="/listing/edit"
+          path="/listing/edit/:id"
           element={
             <ProtectedRoute>
               <EditListing/>

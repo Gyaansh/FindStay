@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams , Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useEffect, useState, useCallback } from "react";
 import Reviews from "../reviews";
@@ -78,10 +78,17 @@ const SingleListing = () => {
           </div>
 
           {/* DETAILS SECTION */}
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="bg-white rounded-2xl shadow-xl p-8 relative">
             <h1 className="text-3xl font-bold text-orange-700">
               {listing.title}
             </h1>
+            <Link
+              to={`/listing/edit/${id}`}
+              state={{ mode: "edit" }}
+              className="absolute right-10 rounded-xl border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-600 hover:bg-orange-100"
+            >
+              Edit
+            </Link>
 
             <div className="flex items-center text-gray-600 mt-2">
               <span className="material-symbols-outlined">location_on</span>

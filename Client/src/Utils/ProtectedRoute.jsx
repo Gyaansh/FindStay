@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
       .finally(() => setLoading(false));
   }, []);
 
-  // ✅ show toast ONLY when auth fails
+  // show toast ONLY when auth fails
   useEffect(() => {
     if (!loading && !isAuth) {
       showError("You need to login first");
