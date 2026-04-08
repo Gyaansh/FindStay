@@ -9,6 +9,7 @@ import isLoggedIn from "../Utils/isLoggedIn.js";
 import checkAuth from "../Controllers/checkAuth.js";
 import logOutUser from "../Controllers/logOutUser.js";
 import authenticateUser from "../Utils/authenticateUser.js";
+import getUsername from "../Controllers/getUsername.js";
 const Router = express.Router();
 
 Router.post("/signup", userValidator, wrapAsync(userSignUp),logInUser);
@@ -18,5 +19,7 @@ Router.post("/login", isAlreadyLoggedIn,authenticateUser, logInUser,);
 Router.get("/checkauth",isLoggedIn, checkAuth); //Checks if the user is logged in 
 
 Router.post("/logout",logOutUser);
+
+Router.get("/profile/username",getUsername);
 
 export default Router;

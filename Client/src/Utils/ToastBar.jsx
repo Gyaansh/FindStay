@@ -20,6 +20,8 @@ export const showPromise = (promise,waiting, messageResolve, messageReject)=>{
     
 }
 export const showLoading = (message)=>{
-    toast.loading(message);
+    toast.loading(message,{
+        duration:2000,
+    });
 }
 export default "Toast";

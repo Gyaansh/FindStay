@@ -1,9 +1,10 @@
-import { useParams , Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useEffect, useState, useCallback } from "react";
 import Reviews from "../reviews";
 import Footer from "../Footer";
 import Header from "../header";
+import getUser from "../Utils/getUser";
 
 const SingleListing = () => {
   const { id } = useParams();
@@ -11,6 +12,7 @@ const SingleListing = () => {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState("");
+  const [isOwner, setIsOwner] = useState(false);
 
   const fetchListing = useCallback(async () => {
     try {
@@ -27,8 +29,21 @@ const SingleListing = () => {
   }, [id]);
 
   useEffect(() => {
+    async function getOwner() {
+      if(!listing) return;
+      let userData = await getUser();
+      if(listing.owner?.username === userData.data){
+        setIsOwner(true);
+      }
+    }
+    getOwner();
+  }, [listing]);
+
+  useEffect(() => {
     fetchListing();
   }, [fetchListing]);
+
+
 
   if (loading) {
     return (
@@ -82,13 +97,15 @@ const SingleListing = () => {
             <h1 className="text-3xl font-bold text-orange-700">
               {listing.title}
             </h1>
-            <Link
-              to={`/listing/edit/${id}`}
-              state={{ mode: "edit" }}
-              className="absolute right-10 rounded-xl border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-600 hover:bg-orange-100"
-            >
-              Edit
-            </Link>
+            {isOwner && (
+              <Link
+                to={`/listing/edit/${id}`}
+                state={{ mode: "edit" }}
+                className="absolute right-10 rounded-xl border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-600 hover:bg-orange-100"
+              >
+                Edit
+              </Link>
+            )}
 
             <div className="flex items-center text-gray-600 mt-2">
               <span className="material-symbols-outlined">location_on</span>

@@ -1,3 +1,4 @@
+import Listing from "../Models/listingSchema.js";
 async function updateListing(req, res) {
   try {
     const { id } = req.params;

@@ -3,7 +3,7 @@ import Footer from "../Footer"
 import EditListing from "../EditListing"
 function Newlisting(){
     return(<>
-        <EditListing mode={"new"}/>
+        <EditListing propMode={"new"}/>
         <Footer/>
     </>)
 }

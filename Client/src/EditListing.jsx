@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import getListingById from "./Utils/getListingById";
 import {
   MapPin,
@@ -22,8 +22,11 @@ const defaultFormData = {
   description: "",
 };
 
-export default function EditListing({ mode = "edit" }) {
+export default function EditListing({ mode : propMode = 'new' }) {
+  const location = useLocation();
+  const mode =  location.state?.mode || propMode;
   const { id } = useParams();
+  
   const navigate = useNavigate();
   const [formData, setFormData] = useState(defaultFormData);
   const [isSubmiting, setIsSubmiting] = useState(false);
@@ -60,26 +63,29 @@ export default function EditListing({ mode = "edit" }) {
 
   const fetchApi = async () => {
     try {
-      const res = await fetch("/api/listing/newlisting", {
-        method: "POST",
+      const api = (mode === "edit"? `/api/listing/edit/${id}`: `/api/listing/newlisting`);
+      const apiMethod = (mode==="edit"? "PUT": "POST");
+      const res = await fetch(api, {
+        method: apiMethod,
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-
-      const result = await res.json();
+      const data = res.json();
       if (res.ok) {
         setTimeout(() => {
           showSuccess(successText);
           navigate(redirect);
-        }, 3000);
+        }, 2000);
+      }else {
+        setTimeout(() => {
+        setIsSubmiting(false);
+      }, 2000);
       }
 
-      setTimeout(() => {
-        setIsSubmiting(false);
-      }, 3000);
+      
     } catch (err) {
       console.error("Request failed:", err);
     }
