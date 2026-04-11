@@ -10,7 +10,11 @@ import listingsRoute from "./Routes/listingsRoute.js"
 import userRoute from "./Routes/userRoute.js";
 import ExpressError from "./Utils/ExpressError.js";
 import User from "./Models/userSchema.js";
-dotenv.config();
+
+if(process.env.NODE_ENV != "production"){
+    dotenv.config();
+}
+
 const app = express();
 const port = 8080;
 

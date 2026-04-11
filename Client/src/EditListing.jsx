@@ -31,13 +31,14 @@ export default function EditListing({ mode: propMode = "new" }) {
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState(defaultFormData);
+  const [images, setImages] = useState([]);
+
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
   useEffect(() => {
     if (mode === "new") {
       const userInfo = async () => {
-        console.log("called");
         const UserId = await getUserId();
         setFormData((prev) => ({
           ...prev,
@@ -59,7 +60,7 @@ export default function EditListing({ mode: propMode = "new" }) {
         price: initialData.price || "",
         URL: initialData.URL,
         description: initialData.description || "",
-        owner: initialData.owner?._id ,
+        owner: initialData.owner?._id,
       });
     } else {
       setFormData(defaultFormData);
@@ -69,9 +70,6 @@ export default function EditListing({ mode: propMode = "new" }) {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-
-
 
   let loadingText = mode === "edit" ? "Making Changes" : "Adding New Listing";
   let successText =
@@ -89,15 +87,28 @@ export default function EditListing({ mode: propMode = "new" }) {
       const api =
         mode === "edit" ? `/api/listing/edit/${id}` : `/api/listing/newlisting`;
       const apiMethod = mode === "edit" ? "PUT" : "POST";
+      const uploadFiles = new FormData();
+
+      images.forEach((file) => {
+        uploadFiles.append("images", file);
+      });
+      uploadFiles.append("title", formData.title);
+      uploadFiles.append("location", formData.location);
+      uploadFiles.append("country", formData.country);
+      uploadFiles.append("price", formData.price);
+      uploadFiles.append("description", formData.description);
+      console.log(images.length);
+      
+
+      //Api Call will send req.file-> images,  req.body-> text data
       const res = await fetch(api, {
         method: apiMethod,
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: uploadFiles,
       });
-      const data = res.json();
+
+      const data = await res.json();
+
       if (res.ok) {
         setTimeout(() => {
           showSuccess(successText);
@@ -113,30 +124,27 @@ export default function EditListing({ mode: propMode = "new" }) {
     }
   };
 
-
-  const handleDelete = async ()=>{
-    const res = await fetch(`/api/listing/delete/${id}`,{
-      method : "delete",
-      credentials : "include",
-      headers : {
-        "Content-Type": "application/json"
+  const handleDelete = async () => {
+    const res = await fetch(`/api/listing/delete/${id}`, {
+      method: "delete",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify()
+      body: JSON.stringify(),
     });
-    
-    
-    if(res.ok){
+
+    if (res.ok) {
       showLoading("Deleting");
       setTimeout(() => {
         showSuccess("Deleted");
         navigate("/");
       }, 2000);
       return;
-    } else{
+    } else {
       showError(data.message);
     }
-  }
-
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -263,10 +271,10 @@ export default function EditListing({ mode: propMode = "new" }) {
                 <div className="mt-4 flex gap-3">
                   <button
                     onClick={handleDelete}
-                   className="flex-1 bg-red-500 text-white py-2 rounded-xl cursor-pointer 
-transition-all duration-300
-hover:bg-red-600 hover:shadow-[0_0_15px_rgba(239,68,68,0.7)]
-active:scale-95"
+                    className="flex-1 bg-red-500 text-white py-2 rounded-xl cursor-pointer 
+                                transition-all duration-300
+                                hover:bg-red-600 hover:shadow-[0_0_15px_rgba(239,68,68,0.7)]
+                                active:scale-95"
                   >
                     Delete
                   </button>
@@ -274,10 +282,10 @@ active:scale-95"
                   <button
                     onClick={() => setShowDelete(false)}
                     className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-xl cursor-pointer
-transition-all duration-300 ease-in-out
-hover:bg-gray-100 hover:text-black
-hover:shadow-[0_0_12px_rgba(0,0,0,0.15)]
-active:opacity-90"
+                                transition-all duration-300 ease-in-out
+                                hover:bg-gray-100 hover:text-black
+                                hover:shadow-[0_0_12px_rgba(0,0,0,0.15)]
+                                active:opacity-90"
                   >
                     Cancel
                   </button>
@@ -287,6 +295,7 @@ active:opacity-90"
           )}
           {/* Right Side Form */}
           <form
+            encType="multipart/form-data"
             onSubmit={handleSubmit}
             className="rounded-3xl bg-white p-6 shadow-md md:p-8"
           >
@@ -363,14 +372,15 @@ active:opacity-90"
                   {formData.URL.map((url, index) => (
                     <div key={index} className="flex items-center gap-3">
                       <input
-                        type="text"
-                        value={url}
-                        onChange={(e) =>
-                          handleImageChange(index, e.target.value)
-                        }
+                        type="file"
+                        onChange={(e) => {
+                          setImages((prev) => [...prev, ...e.target.files]);
+                          // handleImageChange(index, e.target.value);
+                        }}
                         placeholder={`Image URL ${index + 1}`}
                         className="w-full rounded-2xl border border-gray-200 px-4 py-3 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
                       />
+                      <br />
 
                       <button
                         type="button"
