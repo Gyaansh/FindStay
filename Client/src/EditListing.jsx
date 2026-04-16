@@ -98,7 +98,6 @@ export default function EditListing({ mode: propMode = "new" }) {
       uploadFiles.append("price", formData.price);
       uploadFiles.append("description", formData.description);
       console.log(images.length);
-      
 
       //Api Call will send req.file-> images,  req.body-> text data
       const res = await fetch(api, {
@@ -373,9 +372,9 @@ export default function EditListing({ mode: propMode = "new" }) {
                     <div key={index} className="flex items-center gap-3">
                       <input
                         type="file"
+                        multiple
                         onChange={(e) => {
-                          setImages((prev) => [...prev, ...e.target.files]);
-                          // handleImageChange(index, e.target.value);
+                          setImages([...e.target.files]);
                         }}
                         placeholder={`Image URL ${index + 1}`}
                         className="w-full rounded-2xl border border-gray-200 px-4 py-3 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"

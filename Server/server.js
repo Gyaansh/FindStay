@@ -1,19 +1,19 @@
+import dotenv from "dotenv/config";
 import cors from "cors";
 import DbConnect from "./Config/Database.js"
 import express from "express";
 import passport from "passport";
 import  LocalStrategy from 'passport-local';
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
 
 import listingsRoute from "./Routes/listingsRoute.js"
 import userRoute from "./Routes/userRoute.js";
 import ExpressError from "./Utils/ExpressError.js";
 import User from "./Models/userSchema.js";
 
-if(process.env.NODE_ENV != "production"){
-    dotenv.config();
-}
+
+    // dotenv.config();
+
 
 const app = express();
 const port = 8080;
