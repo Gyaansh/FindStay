@@ -1,15 +1,13 @@
-import SingleListing from "../SingleListing";
-import Header from "../Header";
-import Footer from "../Footer";
+import SingleListing from "../Components/SingleListing";
+import Header from "../Components/Header";
+import Map from "../Components/Map"
 function SingleListingPage() {
   return (
-    <>
+    <div className="bg-orange-50">
       <Header/>
       <SingleListing />
-
-      
-      <Footer/>
-    </>
+      <Map/>
+    </div>
   );
 }
 export default SingleListingPage;

@@ -1,7 +1,7 @@
 import NavBar from "./NavBar";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { showLoading, showSuccess } from "./Utils/ToastBar";
+import { showSuccess } from "../Utils/ToastBar";
 
 function Header() {
   const navigate = useNavigate();

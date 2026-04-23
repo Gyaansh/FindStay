@@ -1,9 +1,9 @@
-import Footer from "../Footer"
-import EditListing from "../EditListing"
+
+import EditListing from "../Components/EditListing"
 function Newlisting(){
     return(<>
         <EditListing mode="new" />
-        <Footer/>
+
     </>)
 }
 export default Newlisting

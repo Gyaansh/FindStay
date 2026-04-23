@@ -10,6 +10,8 @@ import checkAuth from "../Controllers/checkAuth.js";
 import logOutUser from "../Controllers/logOutUser.js";
 import authenticateUser from "../Utils/authenticateUser.js";
 import getUsername from "../Controllers/getUsername.js";
+
+
 const Router = express.Router();
 
 Router.post("/signup", userValidator, wrapAsync(userSignUp),logInUser);

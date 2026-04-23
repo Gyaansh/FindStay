@@ -3,14 +3,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import gitLogo from "../assets/git.png";
 import googleLogo from "../assets/google.webp";
-import visibilityOff from "../assets/VisibilityOff.svg";
-import visibilityOn from "../assets/VisibilityOn.svg";
+import visibilityOff from "../assets/visibilityOff.svg";
+import visibilityOn from "../assets/visibilityOn.svg";
 import validatePassword from "../Utils/passwordValidator";
 import { showError, showPromise } from "../Utils/ToastBar";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import loginUser from "../Utils/loginUser";
-import Footer from "../Footer";
 
 
 const Signup = () => {
@@ -269,7 +268,6 @@ const Signup = () => {
         </p>
       </div>
     </div>
-      <Footer/>
   </div>);
 };
 

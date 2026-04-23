@@ -1,11 +1,9 @@
-import Footer from "../Footer";
-import EditListing from "../EditListing";
+import EditListing from "../Components/EditListing";
 
 function EditListingPage() {
   return (
     <>
       <EditListing />
-      <Footer />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { use, useState } from "react";
-import { showError, showPromise } from "./Utils/ToastBar";
+import { showError, showPromise } from "../Utils/ToastBar";
 import { useNavigate } from "react-router-dom";
 const ListingForm = () => { 
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const ListingForm = () => {
 
   const [errors, setErrors] = useState({});
 
-  // Theme colors from Airbnb design [file:27]
+  // Theme colors for the listing form UI.
   const theme = {
     bg: 'from-amber-50 via-orange-50 to-rose-50',
     card: 'bg-white/90 backdrop-blur-sm border border-orange-100/50 shadow-2xl',
@@ -142,7 +142,7 @@ const fetchApi = async()=>{
           </div>
 
 
-          {/* Images - FIXED REMOVE BUTTON [file:27] */}
+          {/* Images with removable previews */}
           <div>
             <label className="block text-lg font-bold text-gray-800 mb-4">Property Photos * (Max 15)</label>
             

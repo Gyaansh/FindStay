@@ -1,14 +1,16 @@
-import SingleListingPage from "./Pages/SingleListingPage";
+import SingleListingPage from "../Pages/SingleListingPage";
 import { Routes, Route } from "react-router-dom";
 import "./tailwind.css";
-import Signup from "./Pages/Signup";
+import Signup from "../Pages/Signup";
 import { Toaster } from "react-hot-toast";
-import Login from "./Pages/Login";
-import HomePage from "./Pages/HomePage";
-import Newlisting from "./Pages/NewListing";
-import ProtectedRoute from "./Utils/ProtectedRoute";
-import EditListingPage from "./Pages/EditListingPage";
+import Login from "../Pages/Login";
+import HomePage from "../Pages/HomePage";
+import Newlisting from "../Pages/NewListing";
+import ProtectedRoute from "../Utils/ProtectedRoute";
+import EditListingPage from "../Pages/EditListingPage";
 import ScrollToTop from "./ScrollToTop";
+import Footer from "./Footer"
+import Map from "./Map";
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/map" element={<Map/>}/>
           <Route
             path="/listing/edit/:id"
             element={
@@ -38,6 +41,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/listing/:id" element={<SingleListingPage />} />
         </Routes>
+        <Footer/>
     </>
   );
 }

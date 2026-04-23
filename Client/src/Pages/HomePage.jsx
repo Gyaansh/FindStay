@@ -1,12 +1,10 @@
-import Header from "../Header";
-import CardList from "../CardList";
-import Footer from "../Footer";
+import Header from "../Components/Header";
+import CardList from "../Components/CardList";
 
 function HomePage(){
     return(<>
     <Header/>
     <CardList/>
-    <Footer/>
     </>)
 }
 export default HomePage;

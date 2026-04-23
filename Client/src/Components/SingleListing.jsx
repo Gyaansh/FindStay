@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useEffect, useState, useCallback } from "react";
-import getUsername from "./Utils/getUsername";
+import getUsername from "../Utils/getUsername";
 import Reviews from "./Reviews";
 const SingleListing = () => {
   const { id } = useParams();

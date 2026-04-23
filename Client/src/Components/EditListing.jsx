@@ -8,9 +8,9 @@ import {
   Image as ImageIcon,
   Trash2,
 } from "lucide-react";
-import getListingById from "./Utils/getListingById";
-import { showError, showLoading, showSuccess } from "./Utils/ToastBar";
-import getUserId from "./Utils/getUserId";
+import getListingById from "../Utils/getListingById";
+import { showError, showLoading, showSuccess } from "../Utils/ToastBar";
+import getUserId from "../Utils/getUserId";
 
 const defaultFormData = {
   title: "",
