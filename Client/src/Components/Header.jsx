@@ -1,13 +1,16 @@
 import NavBar from "./NavBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { showSuccess } from "../Utils/ToastBar";
 import FindStay from "../assets/FindStay-logo.svg";
+
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [profileDropdown, setProfileDropdown] = useState(false);
 
   const logOutUser = async ()=>{
     try{
@@ -22,39 +25,43 @@ function Header() {
     const result = await res.json();
     if(result.success){
       setLoggedIn(false);
+      setUser(null);
       showSuccess("Logged Out Successfully");
+      navigate("/");
     }
     } catch(err){
-      throw err.message;
+      console.error(err);
     }
   }
 
-
-  const isLoggedIn = async () => {
-    try {
-      const res = await fetch("/api/user/checkauth", {
-        credentials: "include",
-      });
-      const data = await res.json();
-      
-      if (data.loggedIn) {
-        setLoggedIn(true);
+  useEffect(() => {
+    const isLoggedIn = async () => {
+      try {
+        const res = await fetch("/api/user/checkauth", {
+          credentials: "include",
+        });
+        const data = await res.json();
+        
+        if (data.loggedIn) {
+          setLoggedIn(true);
+          setUser(data.user);
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      throw err.message;
-    }
-  };
-  isLoggedIn();
+    };
+    isLoggedIn();
+  }, []);
 
   return (
     <header className="flex sticky top-0 z-10 flex-col md:flex-row md:items-center md:justify-between px-6 py-4 bg-white shadow-md gap-4 relative">
       {/* Left */}
       <button
         onClick={() => navigate("/")}
-        className="text-xl font-semibold cursor-pointer group"
+        className="text-xl font-semibold cursor-pointer group flex items-center gap-2"
       >
         <img src={FindStay} alt="FindStay Logo" className="h-10 w-auto transition-transform duration-200 group-hover:scale-110" />
-      <span className="text-sm font-medium ">Explore</span>
+        <span className="text-sm font-medium ">Explore</span>
       </button>
 
       {/* Center */}
@@ -64,16 +71,46 @@ function Header() {
 
       {/* Desktop Buttons */}
       <div className="hidden md:flex items-center gap-4">
-        <button
-          onClick={() =>
-            {loggedIn? logOutUser() : (navigate("/login", {
-              state: { from: location },
-            }))}
-          }
-          className="px-4 py-2 rounded-lg hover:bg-gray-100 transition"
-        >
-          {loggedIn? "LogOut" : "LogIn"}
-        </button>
+        {!loggedIn ? (
+          <button
+            onClick={() => navigate("/login", { state: { from: location } })}
+            className="px-4 py-2 rounded-lg hover:bg-gray-100 transition"
+          >
+            LogIn
+          </button>
+        ) : (
+          <div className="relative">
+            <div 
+              onClick={() => setProfileDropdown(!profileDropdown)}
+              className="w-10 h-10 rounded-full bg-red-500 text-white flex items-center justify-center font-bold cursor-pointer hover:bg-red-600 transition"
+            >
+              {user?.username ? user.username.charAt(0).toUpperCase() : "U"}
+            </div>
+            
+            {profileDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border z-20">
+                <button
+                  onClick={() => {
+                    setProfileDropdown(false);
+                    navigate("/profile");
+                  }}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                >
+                  My Profile
+                </button>
+                <button
+                  onClick={() => {
+                    setProfileDropdown(false);
+                    logOutUser();
+                  }}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                >
+                  LogOut
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
         <button
           onClick={() => navigate("/listing/new")}
@@ -101,6 +138,18 @@ function Header() {
             All Listings
           </button>
 
+          {loggedIn && (
+             <button
+              onClick={() => {
+                navigate("/profile");
+                setMenuOpen(false);
+              }}
+              className="px-4 py-2 rounded-lg hover:bg-gray-100 text-left"
+            >
+              My Profile
+            </button>
+          )}
+
           <button
             onClick={() => {
               navigate("/listing/new");
@@ -110,6 +159,28 @@ function Header() {
           >
             Add New Listing
           </button>
+          
+          {loggedIn ? (
+             <button
+              onClick={() => {
+                logOutUser();
+                setMenuOpen(false);
+              }}
+              className="px-4 py-2 text-red-600 rounded-lg hover:bg-red-50 text-left font-medium"
+            >
+              LogOut
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                navigate("/login", { state: { from: location } });
+                setMenuOpen(false);
+              }}
+              className="px-4 py-2 rounded-lg hover:bg-gray-100 text-left"
+            >
+              LogIn
+            </button>
+          )}
         </div>
       )}
     </header>

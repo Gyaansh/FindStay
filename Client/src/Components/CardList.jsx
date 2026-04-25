@@ -1,19 +1,27 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import Card from './Card';
-const CardList = () => {
+const CardList = ({ ownerId }) => {
     let [userData , setUserData] = useState({data:[]})
     const [searchParams] = useSearchParams();
     const search = searchParams.get('search') || '';
     const type = searchParams.get('type') || 'place';
 
     useEffect(()=>{
-        const url = search ? `/api/listing?search=${encodeURIComponent(search)}&type=${type}` : "/api/listing";
+        let url = search ? `/api/listing?search=${encodeURIComponent(search)}&type=${type}` : "/api/listing";
+        if (ownerId) {
+            url = `/api/listing?owner=${ownerId}`;
+        } else if (search) {
+            url = `/api/listing?search=${encodeURIComponent(search)}&type=${type}`;
+        } else {
+            url = `/api/listing`;
+        }
+
         fetch(url)
         .then((res)=> res.json())
         .then((res)=> setUserData(res))
         .catch((err) => console.log(err))
-    },[search, type]);
+    },[search, type, ownerId]);
 
     return (
         <>

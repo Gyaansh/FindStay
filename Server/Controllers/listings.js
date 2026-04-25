@@ -2,9 +2,13 @@ import Listing from "../Models/listingSchema.js";
 
 async function listings(req,res){
     try{
-        const { search, type } = req.query;
+        const { search, type, owner } = req.query;
         let filter = {};
         
+        if (owner) {
+            filter.owner = owner;
+        }
+
         if (search) {
             if (type === "country") {
                 filter.country = { $regex: search, $options: "i" };

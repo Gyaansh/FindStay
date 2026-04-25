@@ -8,6 +8,7 @@ import HomePage from "../Pages/HomePage";
 import Newlisting from "../Pages/NewListing";
 import ProtectedRoute from "../Utils/ProtectedRoute";
 import EditListingPage from "../Pages/EditListingPage";
+import ProfilePage from "../Pages/ProfilePage";
 import ScrollToTop from "./ScrollToTop";
 import Footer from "./Footer"
 import Map from "./Map";
@@ -33,6 +34,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <EditListingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             }
           />

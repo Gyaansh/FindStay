@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import User from "../Models/userSchema.js";
 
-const isLoggedIn = (req, res, next) => { //checks if user is logged in
+const isLoggedIn = async (req, res, next) => { 
   const token = req.cookies?.token;
 
   if (!token) {
@@ -10,7 +11,11 @@ const isLoggedIn = (req, res, next) => { //checks if user is logged in
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // attach user info
+    const user = await User.findById(decoded.id || decoded._id);
+    if (!user) {
+       return res.status(401).json({ message: "User not found" });
+    }
+    req.user = user; // attach full user info
     next(); // allow request
   } catch (err) {
     return res.status(401).json({

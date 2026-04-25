@@ -11,7 +11,7 @@ async function newListing(req, res) {
       });
     }
 
-    let { title, description, price, location, country, owner } = req.body;
+    let { title, description, price, location, country } = req.body;
     let newListing = new Listing({
       title: title,
       description: description,
@@ -19,7 +19,7 @@ async function newListing(req, res) {
       price: price,
       location: location,
       country: country,
-      owner: owner,
+      owner: req.user._id,
     });
     const savedListing = await newListing.save();
 
