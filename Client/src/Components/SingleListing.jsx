@@ -125,7 +125,7 @@ const SingleListing = () => {
             </p>
 
             <div className="mt-6 text-2xl font-semibold text-orange-600">
-              ${listing.price}
+              ₹{listing.price}
               <span className="text-base text-gray-500"> / night</span>
             </div>
 

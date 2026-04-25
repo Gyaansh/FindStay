@@ -1,8 +1,24 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import NativeSelect from "@mui/material/NativeSelect";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function NavBar() {
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [type, setType] = useState(searchParams.get("type") || "place");
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (search.trim()) {
+      navigate(`/?search=${encodeURIComponent(search.trim())}&type=${type}`);
+    } else {
+      navigate(`/`);
+    }
+  };
+
   return (
     <div className="my-1 w-full px-4 flex justify-center">
       <div
@@ -20,9 +36,10 @@ export default function NavBar() {
           {/* Mobile dropdown */}
           <div className="block  ">
             <NativeSelect
-              defaultValue="place"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
               className="text-sm bg-transparent"
-              inputProps={{ name: "search" }}
+              inputProps={{ name: "type" }}
             >
               <option value="place">Place</option>
               <option value="country">Country</option>
@@ -30,9 +47,11 @@ export default function NavBar() {
           </div>
 
           {/* Search form */}
-          <form className="flex items-center flex-1 gap-2">
+          <form onSubmit={handleSearch} className="flex items-center flex-1 gap-2">
             <input
               type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Enter place"
               className="
                 flex-1
