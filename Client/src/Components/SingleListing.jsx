@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import { useEffect, useState, useCallback } from "react";
 import getUsername from "../Utils/getUsername";
 import Reviews from "./Reviews";
+import SingleListingSkeleton from "./SingleListingSkeleton";
 const SingleListing = () => {
   const { id } = useParams();
 
@@ -42,11 +43,7 @@ const SingleListing = () => {
   }, [fetchListing]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
+    return <SingleListingSkeleton />;
   }
 
   if (!listing) {
