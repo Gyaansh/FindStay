@@ -25,6 +25,7 @@ const logInUser = async (req, res) => {
       secure: true,         // true in production (HTTPS)
       sameSite: "none",     //none in prodection
       maxAge: 60 * 24 * 60 * 60 * 1000, // 60 day
+      path:"/"
     });
 
     res.status(200).json({

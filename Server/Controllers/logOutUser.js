@@ -3,6 +3,7 @@ function logOutUser(req,res){
       httpOnly: true,        // cannot be accessed by JS
       secure: true,         // true in production (HTTPS)
       sameSite: "none",    //  none in production
+      path:"/"
     });
 
     res.status(200).json({
