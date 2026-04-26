@@ -1,4 +1,4 @@
-# WanderLust
+# Findstay
 A dynamic E platform for booking hotels, property &amp; many more... 
 =======
 
@@ -13,7 +13,7 @@ A dynamic E platform for booking hotels, property &amp; many more...
 
 ## Why It Stands Out
 
-WanderLust is more than a CRUD project. It is a polished property-listing experience where users can browse stays, open detailed listing pages, leave reviews, and manage their own listings through protected routes. The latest version also supports real image-file uploads for both creating and editing listings.
+Findstay is more than a CRUD project. It is a polished property-listing experience where users can browse stays, open detailed listing pages, leave reviews, and manage their own listings through protected routes. The latest version also supports real image-file uploads for both creating and editing listings.
 
 ## Highlights
 

@@ -5,9 +5,10 @@
 # VS Code settings
 .vscode/
 
-
 #node modules
 node_modules/
 
 #uploads
 uploads/
+
+*/dist
