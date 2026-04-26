@@ -12,6 +12,7 @@ import ProfilePage from "../Pages/ProfilePage";
 import ScrollToTop from "./ScrollToTop";
 import Footer from "./Footer"
 import Map from "./Map";
+import PageNotFound from "../Pages/PageNotFound";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/listing/:id" element={<SingleListingPage />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer/>
     </>

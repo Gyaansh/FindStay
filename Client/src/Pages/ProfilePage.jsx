@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Components/Header";
 import CardList from "../Components/CardList";
+import CardSkeleton from "../Components/CardSkeleton";
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -29,9 +30,31 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center h-screen text-xl font-medium">
-        Loading Profile...
-      </div>
+      <>
+        <Header />
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          {/* Skeleton Profile Header */}
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-8 bg-white p-8 rounded-2xl shadow-sm border mb-12 animate-pulse">
+            <div className="w-32 h-32 rounded-full bg-gray-200"></div>
+            <div className="flex flex-col items-center md:items-start gap-3 mt-2 w-full">
+              <div className="h-8 bg-gray-200 rounded w-48"></div>
+              <div className="h-5 bg-gray-200 rounded w-64"></div>
+              <div className="h-4 bg-gray-200 rounded w-40 mt-1"></div>
+            </div>
+          </div>
+
+          {/* Skeleton User Listings */}
+          <div>
+            <div className="h-8 bg-gray-200 rounded w-40 mb-2 animate-pulse"></div>
+            <div className="h-5 bg-gray-200 rounded w-72 mb-6 animate-pulse"></div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-20">
+              {[...Array(4)].map((_, index) => (
+                <CardSkeleton key={index} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </>
     );
   }
 

@@ -67,12 +67,11 @@ export default function EditListing({ mode = "new" }) {
         return;
       }
 
-      const userId = await getUserId();
+      
 
       if (!ignore) {
         setFormData((prev) => ({
           ...defaultFormData,
-          owner: userId,
           country: prev.country || "India",
         }));
         setImages([]);
@@ -173,9 +172,7 @@ export default function EditListing({ mode = "new" }) {
     uploadFiles.append("price", formData.price);
     uploadFiles.append("description", formData.description.trim());
 
-    if (pageMode === "new" && formData.owner) {
-      uploadFiles.append("owner", formData.owner);
-    }
+    
 
     const keptImageIds = [];
 
